@@ -29,6 +29,8 @@
             --gradient-gold: linear-gradient(135deg, #d4a853 0%, #e07b39 100%);
             --shadow-soft: 0 10px 40px rgba(0, 0, 0, 0.3);
             --shadow-glow: 0 0 30px rgba(212, 168, 83, 0.3);
+            --success-color: #22c55e;
+            --error-color: #ef4444;
         }
 
         * {
@@ -890,7 +892,7 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Form Message States */
+        /* Form Message States - Fixed */
         .form-message {
             padding: 1rem;
             border-radius: 12px;
@@ -898,20 +900,140 @@
             display: none;
             font-size: 0.95rem;
             line-height: 1.5;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .form-message.success {
-            background: rgba(34, 197, 94, 0.1);
-            border: 1px solid rgba(34, 197, 94, 0.2);
+            background: rgba(34, 197, 94, 0.15);
+            border: 1px solid rgba(34, 197, 94, 0.3);
             color: #4ade80;
             display: block;
         }
 
         .form-message.error {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.2);
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
             color: #f87171;
             display: block;
+        }
+
+        /* GREETING MESSAGE STYLES - NEW */
+        .greeting-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .greeting-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .greeting-card {
+            background: var(--secondary-dark);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 3rem;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            animation: greetingPop 0.5s ease;
+            box-shadow: var(--shadow-soft);
+        }
+
+        @keyframes greetingPop {
+            0% {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .greeting-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2.5rem;
+            color: var(--primary-dark);
+            animation: iconPulse 0.5s ease 0.3s both;
+        }
+
+        @keyframes iconPulse {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .greeting-card h3 {
+            font-size: 1.8rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+
+        .greeting-card p {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+        }
+
+        .greeting-card .user-name {
+            color: var(--accent-gold);
+            font-weight: 600;
+            font-size: 1.2rem;
+            display: block;
+            margin: 0.5rem 0;
+        }
+
+        .greeting-close {
+            margin-top: 2rem;
+            padding: 1rem 2.5rem;
+            background: var(--gradient-gold);
+            color: var(--primary-dark);
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .greeting-close:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
         }
 
         /* Quick Action Buttons */
@@ -1029,7 +1151,6 @@
 
         /* ==================== RESPONSIVE DESIGN ==================== */
 
-        /* Large Tablets and Small Laptops (1024px and below) */
         @media (max-width: 1024px) {
             .hero-container {
                 grid-template-columns: 1fr;
@@ -1071,11 +1192,13 @@
 
             .footer-container {
                 grid-template-columns: 1fr 1fr;
-                gap: 2rem;
+            }
+
+            .greeting-card {
+                padding: 2rem;
             }
         }
 
-        /* Tablets (768px and below) */
         @media (max-width: 768px) {
             .hamburger {
                 display: flex;
@@ -1178,9 +1301,16 @@
                 flex-direction: column;
                 text-align: center;
             }
+
+            .greeting-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .greeting-card h3 {
+                font-size: 1.5rem;
+            }
         }
 
-        /* Mobile Phones (480px and below) */
         @media (max-width: 480px) {
             html {
                 font-size: 14px;
@@ -1245,9 +1375,18 @@
             .form-group textarea {
                 padding: 0.9rem 1rem;
             }
+
+            .greeting-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 2rem;
+            }
+
+            .greeting-card h3 {
+                font-size: 1.3rem;
+            }
         }
 
-        /* Extra Small Phones (360px and below) */
         @media (max-width: 360px) {
             .hero-title {
                 font-size: 1.75rem;
@@ -1264,9 +1403,12 @@
             .special-card .price {
                 font-size: 2rem;
             }
+
+            .greeting-card {
+                padding: 1.5rem 1rem;
+            }
         }
 
-        /* Touch Device Optimizations */
         @media (hover: none) and (pointer: coarse) {
             .btn:hover {
                 transform: none;
@@ -1285,7 +1427,6 @@
             }
         }
 
-        /* High DPI Screens */
         @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
             .hero-image img,
             .menu-image img,
@@ -1631,13 +1772,13 @@
                 
                 <form id="contactForm" novalidate>
                     <div class="form-group">
-                        <label for="from_name">Your Name *</label>
-                        <input type="text" id="from_name" name="from_name" placeholder="Enter your full name" required autocomplete="name">
+                        <label for="user_name">Your Name *</label>
+                        <input type="text" id="user_name" name="user_name" placeholder="Enter your full name" required autocomplete="name">
                     </div>
                     
                     <div class="form-group">
-                        <label for="from_email">Your Email *</label>
-                        <input type="email" id="from_email" name="from_email" placeholder="your.email@example.com" required autocomplete="email">
+                        <label for="user_email">Your Email *</label>
+                        <input type="email" id="user_email" name="user_email" placeholder="your.email@example.com" required autocomplete="email">
                     </div>
                     
                     <div class="form-group">
@@ -1659,6 +1800,18 @@
             </div>
         </div>
     </section>
+
+    <!-- GREETING MESSAGE MODAL - NEW -->
+    <div id="greetingOverlay" class="greeting-overlay">
+        <div class="greeting-card">
+            <div class="greeting-icon">✓</div>
+            <h3>Message Sent Successfully!</h3>
+            <p>Thank you for reaching out,</p>
+            <span id="greetingName" class="user-name"></span>
+            <p>We've received your message and will get back to you at your email shortly.</p>
+            <button class="greeting-close" onclick="closeGreeting()">Awesome, Thanks!</button>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer>
@@ -1705,19 +1858,22 @@
         </div>
     </footer>
 
-    <!-- JavaScript - Fixed and Optimized -->
+    <!-- JavaScript - FIXED EMAILJS INTEGRATION WITH YOUR CREDENTIALS -->
     <script>
         // ==========================================
-        // EMAILJS CONFIGURATION - REPLACE THESE VALUES
+        // YOUR EMAILJS CREDENTIALS - ALREADY CONFIGURED
         // ==========================================
-        const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY_HERE';
-        const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID_HERE';
-        const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID_HERE';
+        const EMAILJS_PUBLIC_KEY = 'QdFmKE3gWfzaFPQgO';           // Your Public Key
+        const EMAILJS_SERVICE_ID = 'service_cmg0v7y';              // Your Service ID  
+        const EMAILJS_TEMPLATE_ID = 'template_8n1lrmq';              // Your Template ID
         
-        // Initialize EmailJS only if keys are provided
-        if (EMAILJS_PUBLIC_KEY !== 'YOUR_PUBLIC_KEY_HERE') {
+        // Initialize EmailJS immediately
+        (function() {
             emailjs.init(EMAILJS_PUBLIC_KEY);
-        }
+            console.log('✓ EmailJS initialized with your credentials');
+            console.log('Service ID:', EMAILJS_SERVICE_ID);
+            console.log('Template ID:', EMAILJS_TEMPLATE_ID);
+        })();
         
         // ==========================================
         // MOBILE MENU TOGGLE
@@ -1735,7 +1891,6 @@
         
         hamburger.addEventListener('click', toggleMenu);
         
-        // Keyboard accessibility for hamburger
         hamburger.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
@@ -1743,7 +1898,6 @@
             }
         });
         
-        // Close mobile menu when clicking on a link
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', () => {
                 if (menuOpen) {
@@ -1752,7 +1906,6 @@
             });
         });
         
-        // Close menu when clicking outside
         document.addEventListener('click', (e) => {
             if (menuOpen && !hamburger.contains(e.target) && !navLinks.contains(e.target)) {
                 toggleMenu();
@@ -1763,18 +1916,13 @@
         // NAVBAR SCROLL EFFECT
         // ==========================================
         const navbar = document.getElementById('navbar');
-        let lastScroll = 0;
         
         window.addEventListener('scroll', () => {
-            const currentScroll = window.scrollY;
-            
-            if (currentScroll > 50) {
+            if (window.scrollY > 50) {
                 navbar.classList.add('scrolled');
             } else {
                 navbar.classList.remove('scrolled');
             }
-            
-            lastScroll = currentScroll;
         });
         
         // ==========================================
@@ -1826,7 +1974,41 @@
         revealElements.forEach(el => revealObserver.observe(el));
         
         // ==========================================
-        // EMAILJS CONTACT FORM SUBMISSION
+        // GREETING MESSAGE FUNCTIONS - NEW
+        // ==========================================
+        function showGreeting(userName) {
+            const overlay = document.getElementById('greetingOverlay');
+            const nameElement = document.getElementById('greetingName');
+            
+            nameElement.textContent = userName || 'Friend';
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            console.log('✓ Greeting shown for:', userName);
+        }
+        
+        function closeGreeting() {
+            const overlay = document.getElementById('greetingOverlay');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+        
+        // Close greeting on overlay click
+        document.getElementById('greetingOverlay').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) {
+                closeGreeting();
+            }
+        });
+        
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeGreeting();
+            }
+        });
+        
+        // ==========================================
+        // EMAILJS CONTACT FORM SUBMISSION - FIXED
         // ==========================================
         const contactForm = document.getElementById('contactForm');
         const submitBtn = document.getElementById('submitBtn');
@@ -1836,27 +2018,38 @@
             contactForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 
-                // Check if EmailJS is configured
-                if (EMAILJS_PUBLIC_KEY === 'YOUR_PUBLIC_KEY_HERE') {
-                    formMessage.textContent = '⚠️ Email service not configured. Please set up EmailJS credentials.';
-                    formMessage.className = 'form-message error';
-                    return;
-                }
+                // Get form values
+                const nameInput = document.getElementById('user_name');
+                const emailInput = document.getElementById('user_email');
+                const messageInput = document.getElementById('message');
                 
-                // Basic validation
-                const name = document.getElementById('from_name').value.trim();
-                const email = document.getElementById('from_email').value.trim();
-                const message = document.getElementById('message').value.trim();
+                const userName = nameInput.value.trim();
+                const userEmail = emailInput.value.trim();
+                const userMessage = messageInput.value.trim();
                 
-                if (!name || !email || !message) {
+                console.log('Form submitted with:', { userName, userEmail, userMessage });
+                
+                // Validation
+                if (!userName || !userEmail || !userMessage) {
                     formMessage.textContent = 'Please fill in all required fields.';
                     formMessage.className = 'form-message error';
+                    console.error('Validation failed: Empty fields');
                     return;
                 }
                 
-                if (message.length < 10) {
+                if (userMessage.length < 10) {
                     formMessage.textContent = 'Message must be at least 10 characters long.';
                     formMessage.className = 'form-message error';
+                    console.error('Validation failed: Message too short');
+                    return;
+                }
+                
+                // Email validation regex
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(userEmail)) {
+                    formMessage.textContent = 'Please enter a valid email address.';
+                    formMessage.className = 'form-message error';
+                    console.error('Validation failed: Invalid email');
                     return;
                 }
                 
@@ -1866,47 +2059,56 @@
                 formMessage.className = 'form-message';
                 formMessage.style.display = 'none';
                 
-                // Prepare template parameters
+                // Prepare template parameters - MUST MATCH YOUR EMAILJS TEMPLATE VARIABLES
                 const templateParams = {
-                    from_name: name,
-                    from_email: email,
-                    message: message,
-                    to_email: 'niranjanmurugesan10@gmail.com',
-                    reply_to: email
+                    user_name: userName,           // {{user_name}} in your EmailJS template
+                    user_email: userEmail,         // {{user_email}} in your EmailJS template
+                    message: userMessage,            // {{message}} in your EmailJS template
+                    from_name: userName,           // Alternative variable name
+                    reply_to: userEmail,           // For reply functionality
+                    to_email: 'niranjanmurugesan10@gmail.com'  // Your admin email
                 };
                 
+                console.log('Sending email with params:', templateParams);
+                
                 try {
+                    // Send email using EmailJS - CORRECT METHOD SIGNATURE
                     const response = await emailjs.send(
-                        EMAILJS_SERVICE_ID,
-                        EMAILJS_TEMPLATE_ID,
-                        templateParams
+                        EMAILJS_SERVICE_ID,    // service_cmg0v7y
+                        EMAILJS_TEMPLATE_ID, // template_8n1lrmq
+                        templateParams         // Template variables
                     );
                     
-                    // Show success message
-                    formMessage.textContent = '✓ Message sent successfully! We will get back to you soon.';
-                    formMessage.className = 'form-message success';
+                    console.log('✓ SUCCESS! Email sent:', response.status, response.text);
+                    
+                    // Show greeting message with user's name
+                    showGreeting(userName);
                     
                     // Reset form
                     contactForm.reset();
                     
-                    console.log('Email sent successfully:', response);
-                    
                 } catch (error) {
-                    // Show error message
-                    formMessage.textContent = '✗ Failed to send message. Please try again or contact us directly via email/phone.';
-                    formMessage.className = 'form-message error';
+                    console.error('✗ FAILED to send email:', error);
                     
-                    console.error('Email send failed:', error);
+                    // Show detailed error message
+                    let errorMsg = 'Failed to send message. ';
+                    if (error.status === 400) {
+                        errorMsg += 'Please check your template variables match: user_name, user_email, message';
+                    } else if (error.status === 403) {
+                        errorMsg += 'Authentication failed. Please check your Public Key.';
+                    } else if (error.text) {
+                        errorMsg += error.text;
+                    } else {
+                        errorMsg += 'Please try again or contact us directly via email/phone.';
+                    }
+                    
+                    formMessage.textContent = '✗ ' + errorMsg;
+                    formMessage.className = 'form-message error';
                     
                 } finally {
                     // Remove loading state
                     submitBtn.disabled = false;
                     submitBtn.classList.remove('loading');
-                    
-                    // Keep message visible for user to read
-                    setTimeout(() => {
-                        formMessage.style.display = 'none';
-                    }, 8000);
                 }
             });
         }
@@ -1951,24 +2153,6 @@
                 imageObserver.observe(img);
             });
         }
-        
-        // ==========================================
-        // PERFORMANCE: DEBOUNCE SCROLL EVENTS
-        // ==========================================
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
-        }
-        
-        // Apply debouncing to scroll events
-        window.addEventListener('scroll', debounce(updateActiveNav, 50));
     </script>
 </body>
 </html>
